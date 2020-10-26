@@ -11,7 +11,18 @@ int indexOfSmallest(const int a[], int startIndex, int numberUsed);
 
 int main()
 {
+  cout << "this program sorts numbers from lowest to highext./n";
   
+  int sampleArray[10], numberUsed;
+  fillArray(sampleArray, 10, numberUsed);
+  sort(sampleArray, numberUsed);
+  
+  cout << "in sorted order the numbers are:\n";
+  for (int index = 0; index < numberUsed; index++)
+      cout << sampleArray[index] << " ";
+  cout << endl;
+  
+  return 0;
 }
 
 void fillArray(int a[], int size, int& numberUsed)
@@ -31,7 +42,12 @@ void fillArray(int a[], int size, int& numberUsed)
 
 void sort(int a[], int numberUsed);
 {
-
+  int indexOfNextSmallest;
+  for (int index = 0; index < numberUsed - 1; index++)
+  {
+    indexOfNextSmallest = indexOfSmallest(a, index, numberUsed);
+    swapValues(a[index], a[indexOfNextSmallest]);
+  }
 }
 
 void swapValues(int& v1, int& v2)

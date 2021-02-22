@@ -32,7 +32,7 @@ namespace StackBfost
 
     private:
         Node<T> *top;
-    }
+    };
 }
 
-#endif
+#endif //stack_h

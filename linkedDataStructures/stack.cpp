@@ -1,6 +1,6 @@
 
 #include <cstdlib>
-#include "stack.h";
+#include "stack.h"
 namespace StackBfost
 {
     template <class T>
@@ -105,7 +105,7 @@ namespace StackBfost
 
         T result = top->getData();
         Node<T> *discard;
-        
+
         discard = top;
         top = top->getLink();
 

@@ -5,7 +5,7 @@ namespace LinkedListBfost
     template <class T>
     void headInsert(Node<T> *&theHead, const T &theData)
     {
-        head = new Node<T>(theData, theHead);
+        theHead = new Node<T>(theData, theHead);
     }
 
     template <class T>

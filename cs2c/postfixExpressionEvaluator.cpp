@@ -13,6 +13,8 @@ using std::string;
 // a + b * c + ( d * e + f ) * g
 // a b c * + d e * f + g * +
 
+// 6* (5 + ((2 + 3) * 8)) + 3)
+
 const string POSTFIX_EXPRESSION = "6523+8*+3+*";
 
 set<char> operators{ '*', '+' };

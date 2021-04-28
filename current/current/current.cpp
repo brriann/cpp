@@ -1,58 +1,114 @@
-
 #include <iostream>
-#include <stack>
-#include <map>
-#include <set>
-#include <string>
 
-using std::stack;
-using std::map;
-using std::set;
-using std::string;
+using namespace std;
 
-// a + b * c + ( d * e + f ) * g
-// a b c * + d e * f + g * +
+class QueueArray {
+   int front;
+   int back;
+   int currentSize;
+   int capacity;
+   int* queue;
+   void incrementWithWrap(int&);
+public:
+   QueueArray();
+   QueueArray(int);
+   QueueArray(initializer_list<int> list);
+   ~QueueArray();
+   bool enqueue(int);
+   int dequeue();
+   int size();
+};
 
-const string POSTFIX_EXPRESSION = "6523+8*+3+*";
+QueueArray::QueueArray() {
+   front = back = capacity = currentSize = 0;
+   queue = nullptr;
+}
 
-set<char> operators{ '*', '+' };
+QueueArray::QueueArray(int capacityCtr) : QueueArray() {
+   queue = new int[capacityCtr];
+   capacity = capacityCtr;
+}
 
-int main()
-{
-   stack<int> parsedSymbols;
-   int result;
+QueueArray::QueueArray(initializer_list<int> list) : QueueArray() {
+   queue = new int[list.size()];
+   capacity = list.size();
+   for (auto elt : list) {
+      enqueue(elt);
+   }
+}
 
-   for (char c : POSTFIX_EXPRESSION)
-   {
-      // if symbol is a number (aka, "not an operator")
-      if (operators.find(c) == operators.end())
-      {
-         parsedSymbols.push(c - '0'); // ASCII, 0-9 = 48-57
-      }
-      else
-      {
-         int lhs = parsedSymbols.top();
-         parsedSymbols.pop();
+QueueArray::~QueueArray() {
+   delete[] queue;
+}
 
-         int rhs = parsedSymbols.top();
-         parsedSymbols.pop();
-
-         switch (c)
-         {
-            case '*':
-               result = lhs * rhs;
-               break;
-            case '+':
-               result = lhs + rhs;
-               break;
-            default:
-               break;
-         }
-         parsedSymbols.push(result);
-      }
+bool QueueArray::enqueue(int newElement) {
+   if (currentSize == capacity) {
+      return false;
    }
 
-   std::cout << "result: " << result << std::endl;
+   queue[back] = newElement;
+   incrementWithWrap(back);
+
+   ++currentSize;
+   return true;
+}
+
+int QueueArray::dequeue() {
+   if (currentSize < 1) {
+      return 8855;
+   }
+
+   int valueToReturn = queue[front];
+
+   incrementWithWrap(front);
+
+   --currentSize;
+   return valueToReturn;
+}
+
+int QueueArray::size() {
+   return currentSize;
+}
+
+void QueueArray::incrementWithWrap(int& index) {
+   if (index == capacity - 1) {
+      index = 0;
+   }
+   else {
+      ++index;
+   }
+}
+
+int main() {
+
+   QueueArray q = { 0, 1, 2, 3, 4 };
+   QueueArray q2 = QueueArray();
+   QueueArray q3 = QueueArray(5);
+
+   for (int i = 0; i < 5; i++) {
+      cout << q.dequeue() << endl;
+   }
+   q.enqueue(12);
+   q.enqueue(22);
+   q.dequeue();
+   q.enqueue(13);
+   q.enqueue(33);
+   q.dequeue();
+   q.enqueue(14);
+   q.enqueue(44);
+   q.dequeue();
+   q.enqueue(15);
+   q.enqueue(55);
+   q.dequeue();
+   q.enqueue(16);
+   q.enqueue(66);
+   q.dequeue();
+   
+   q.enqueue(66);
+
+   for (int i = 0; i < 5; i++) {
+      cout << q.dequeue() << endl;
+   }
 
    return 0;
 }

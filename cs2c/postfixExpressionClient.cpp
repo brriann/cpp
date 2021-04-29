@@ -1,8 +1,7 @@
-
 #include <iostream>
 #include <string>
 
-#include "current.h"
+#include "postfixExpression.h"
 
 using std::string;
 using postfixExpression::evaluatePostfixExpression;

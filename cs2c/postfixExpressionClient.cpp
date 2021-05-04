@@ -2,9 +2,10 @@
 #include <iostream>
 #include <string>
 
-#include "postfixExpression.h"
+#include "current.h"
 
 using std::string;
+using postfixExpression::SimpleBinaryTree;
 using postfixExpression::convertInfixToPostfix;
 using postfixExpression::evaluatePostfixExpression;
 
@@ -24,6 +25,19 @@ map<string, string> expressionMap = {
 
 int main()
 {
+   SimpleBinaryTree tree = SimpleBinaryTree('*');
+   SimpleBinaryTree tree2 = SimpleBinaryTree('4');
+   SimpleBinaryTree tree3 = SimpleBinaryTree('5');
+   SimpleBinaryTree tree4 = SimpleBinaryTree('+');
+   tree.insertLeft(tree2.root);
+   tree.insertRight(tree3.root);
+
+   SimpleBinaryTree tree5 = SimpleBinaryTree('1');
+   tree4.insertLeft(tree.root);
+   tree4.insertRight(tree5.root);
+
+   tree4.print();
+
    for (auto str : {
       "6523+8*+3+*",
       "65+238*3++*",
@@ -32,7 +46,7 @@ int main()
       std::cout << str << " : " << evaluatePostfixExpression(str) << std::endl;
    }
 
-   for (const auto &expressionPair : expressionMap) {
+   for (const auto& expressionPair : expressionMap) {
       std::cout << expressionPair.first << " : " << expressionPair.second << " : " << convertInfixToPostfix(expressionPair.first) << " : " << evaluatePostfixExpression(convertInfixToPostfix(expressionPair.first)) << std::endl;
    }
 

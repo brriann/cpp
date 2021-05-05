@@ -19,45 +19,68 @@ using std::stack;
 using std::string;
 using std::stringstream;
 
-namespace postfixExpression
+namespace expressions
 {
+   struct Node
+   {
+      char oper;
+      Node* left, * right;
+      Node(const char& oper) : oper(oper), left(nullptr), right(nullptr) {}
+
+      void print(int depth = 0) const
+      {
+         if (left != nullptr)
+         {
+            left->print(depth + 1);
+         }
+         for (int i = 0; i < depth; ++i)
+         {
+            cout << "  ";
+         }
+         cout << oper << endl;
+         if (right != nullptr)
+         {
+            right->print(depth + 1);
+         }
+      }
+
+      void toInfix()
+      {
+         if (left != nullptr) {
+            cout << "(";
+            left->toInfix();
+         }
+         cout << " " << oper << " ";
+         if (right != nullptr) {
+            right->toInfix();
+            cout << ")";
+         }
+      }
+
+      void toPostfix()
+      {
+         if (left != nullptr) {
+            left->toPostfix();
+         }
+         if (right != nullptr) {
+            right->toPostfix();
+         }
+         cout << oper;
+      }
+
+      void insertLeft(Node*& leftNode)
+      {
+         left = leftNode;
+      }
+
+      void insertRight(Node*& rightNode)
+      {
+         right = rightNode;
+      }
+   };
 
    class SimpleBinaryTree
    {
-      struct Node
-      {
-         char oper;
-         Node* left, * right;
-         Node(const char& oper) : oper(oper), left(nullptr), right(nullptr) {}
-
-         void print(int depth = 0) const
-         {
-            if (left != nullptr)
-            {
-               left->print(depth + 1);
-            }
-            for (int i = 0; i < depth; ++i)
-            {
-               cout << "  ";
-            }
-            cout << oper << endl;
-            if (right != nullptr)
-            {
-               right->print(depth + 1);
-            }
-         }
-
-         void insertLeft(Node* &leftNode)
-         {
-            left = leftNode;
-         }
-
-         void insertRight(Node* &rightNode)
-         {
-            right = rightNode;
-         }
-      };
-
    public:
       Node* root;
       SimpleBinaryTree() : root(nullptr) {}
@@ -74,7 +97,19 @@ namespace postfixExpression
             root->print();
          }
       }
-      void insertLeft(Node* &leftNode) {
+      void toInfix()
+      {
+         if (root != nullptr) {
+            root->toInfix();
+         }
+      }
+      void toPostfix()
+      {
+         if (root != nullptr) {
+            root->toPostfix();
+         }
+      }
+      void insertLeft(Node*& leftNode) {
          if (root == nullptr) {
             return;
          }
@@ -82,7 +117,7 @@ namespace postfixExpression
             root->insertLeft(leftNode);
          }
       }
-      void insertRight(Node* &rightNode) {
+      void insertRight(Node*& rightNode) {
          if (root == nullptr) {
             return;
          }
@@ -94,6 +129,34 @@ namespace postfixExpression
 
    // valid operators
    set<char> operators{ '*', '+' };
+
+   SimpleBinaryTree* convertPostfixToExpressionTree(string postFixExpression) {
+      stack<SimpleBinaryTree*> treeStack;
+
+      for (char c : postFixExpression) {
+         // if symbol is a number (aka, "not an operator")
+         if (operators.find(c) == operators.end())
+         {
+            // TODO, better to just use Node* here?
+            SimpleBinaryTree* operandTree = new SimpleBinaryTree(c);
+            treeStack.push(operandTree);
+         }
+         else // operator
+         {
+            SimpleBinaryTree* operatorTree = new SimpleBinaryTree(c);
+            SimpleBinaryTree* rightOperand = treeStack.top();
+            treeStack.pop();
+            SimpleBinaryTree* leftOperand = treeStack.top();
+            treeStack.pop();
+
+            operatorTree->insertRight(rightOperand->root);
+            operatorTree->insertLeft(leftOperand->root);
+
+            treeStack.push(operatorTree);
+         }
+      }
+      return treeStack.top();
+   }
 
    // abc*+de*f+g*+
    int evaluatePostfixExpression(string postfixExpression)

@@ -1,0 +1,4 @@
+https://en.cppreference.com/w/cpp/language/operator_arithmetic
+https://www.programiz.com/cpp-programming/bitwise-operators
+https://quests.nonlinearmedia.org
+https://fgamedia.org/faculty/anand/
